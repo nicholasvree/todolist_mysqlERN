@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import DataForm from "./components/DataForm";
+import SetAndRedirect from "./components/SetAndRedirect";
 import Wrapper from './components/Wrapper'
 
 import logo from './logo.svg';
 import './App.css';
-import Helpers from "./utils/Helpers";
+
 
 
 class App extends Component {
 
-  // componentDidMount() {
-  //   Helpers.getUserSession(this.props.match);
-  // }
+  state = {
+    userCode: null,
+  };
+
+  setUserCode = (value) =>{
+    console.log("SET RAN")
+    this.setState({userCode:value})
+  }
+
+
 
   render() {
 
@@ -22,7 +30,8 @@ class App extends Component {
       <div className="App">
         <Router>
           <Wrapper>
-            <Route path="/:code?" component={DataForm} />
+            <Route path="/code/:userCode?" render={props => <SetAndRedirect {...props} userCode={this.state.userCode} setUserCode = {this.setUserCode} /> }/>
+            <Route exact path="/" render={props => <DataForm userCode =  {this.state.userCode } setUserCode={this.setUserCode} /> }/>
           </Wrapper>
         </Router>
       </div>

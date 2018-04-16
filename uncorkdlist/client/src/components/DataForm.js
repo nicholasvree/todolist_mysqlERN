@@ -1,16 +1,27 @@
 import React, { Component } from "react";
-import Helpers from "../utils/Helpers";
+import Helpers from "../utils/helpers.js";
 
 // import "./Form.css";
 
 class DataForm extends Component {
 
 
-  componentDidMount() {
 
-    console.log("component mounted")
-    Helpers.getUserSession(this.props.match);
-  }
+  componentDidMount() {
+    if(sessionStorage.getItem('userCode') == null)
+      {
+        let unID = Helpers.generateUnid()
+        sessionStorage.setItem('userCode', unID);
+        this.props.setUserCode(unID);
+    }
+    else{
+      this.props.setUserCode(sessionStorage.getItem('userCode'))
+    }
+  };
+
+ 
+
+
 
   // Setting the component's initial state
   state = {
@@ -43,7 +54,7 @@ class DataForm extends Component {
     return (
 
       <div>
-           <h1>{this.props.match.params.code}</h1>
+           <h1>{this.props.userCode}</h1>
 
         <form className="form">
             New:{' '}

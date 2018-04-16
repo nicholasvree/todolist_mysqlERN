@@ -19,7 +19,7 @@ function generateUnid(
         1e9
         ).replace(     // replacing
           /[01]/g,     // zeroes and ones with
-          generateUnid // random hex digits
+          generateUnid() // random hex digits
         ).toLowerCase()
   }
 
