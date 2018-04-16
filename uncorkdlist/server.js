@@ -38,16 +38,6 @@ var db=require("./models")
 require("./routes/controller.js")(app);
 
 
-// app.get("/test", function(req, res) {
-//   console.log(req);
-
-//   console.log("WORKED")
-
-//   res.send("TRUE")
-// });
-
-// Send every request to the React app
-// Define any API routes before this runs
 app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });

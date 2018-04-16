@@ -8,9 +8,14 @@ module.exports = function(app) {
       db.Item.create({
         user_code:req.body.userCode,
         data_string: req.body.dataString
-      }).then(function(postResult) {
-        res.send(req.body)  
-      });
+      })
+      .catch(function(err){
+       return res.send(err)
+      })
+      .then(function(result){
+        return res.send(result)
+      })
+ 
   })
 
   //Route to retrieve records from database
@@ -21,7 +26,6 @@ module.exports = function(app) {
       }
     }).then(function(result){
       console.log(result)
-
       return res.json(result)
     })
   })

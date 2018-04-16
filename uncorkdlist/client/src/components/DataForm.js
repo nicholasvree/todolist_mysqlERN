@@ -38,6 +38,9 @@ class DataForm extends Component {
     return (
       <div>
            <h1>Your Code: {this.props.userCode}</h1>
+           <button onClick={this.props.sortDataStringArray} value="asc">Sort Asc</button>
+           <button onClick={this.props.sortDataStringArray} value="desc">Sort Desc</button>
+
 
            {elements}
 
@@ -52,6 +55,7 @@ class DataForm extends Component {
             />
             <button onClick={this.props.handleFormSubmit}>Submit</button>
         </form>
+        {this.props.error}
       </div>
     );
   }
