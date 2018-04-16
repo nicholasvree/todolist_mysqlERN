@@ -8,62 +8,56 @@ class DataForm extends Component {
 
 
   componentDidMount() {
+
+
     if(sessionStorage.getItem('userCode') == null)
       {
         let unID = Helpers.generateUnid()
         sessionStorage.setItem('userCode', unID);
-        this.props.setUserCode(unID);
+        this.props.setDataStrings(sessionStorage.getItem(unID))
     }
     else{
-      this.props.setUserCode(sessionStorage.getItem('userCode'))
+      this.props.setDataStrings(sessionStorage.getItem('userCode'))
     }
+
+    console.log(this.props.dataStringArray)
   };
 
 
-  // Setting the component's initial state
-  state = {
-    dataString: "",
-  };
-
-  handleInputChange = event => {
-    // Getting the value and name of the input which triggered the change
-    const { name, value } = event.target;
-
-    // Updating the input's state
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleFormSubmit = event => {
-    // Preventing the default behavior of the form submit (which is to refresh the page)
-    event.preventDefault();
-
-    // Alert the user their first and last name, clear `this.state.firstName` and `this.state.lastName`, clearing the inputs
-    Helpers.savedataString({dataString: this.state.dataString,
-                            userCode: this.props.userCode})
-    this.setState({
-      dataString: "",
-    });
-  };
 
   render() {
+
+    let dataStringArray = this.props.dataStringArray
+
+    const elements = dataStringArray.map(data => {    
+      return(
+         <h1>{data.data_string}</h1>
+      ) 
+  }) 
+
+    console.log("DATA STRING ARRAY", dataStringArray)
+
+
     // Notice how each input has a `value`, `name`, and `onChange` prop
     return (
+
 
       <div>
            <h1>{this.props.userCode}</h1>
 
+           {elements}
+
+
         <form className="form">
             New:{' '}
             <input
-              value={this.state.dataString}
+              value={this.props.dataString}
               name="dataString"
-              onChange={this.handleInputChange}
+              onChange={this.props.handleInputChange}
               type="text"
               placeholder="Data"
             />
-            <button onClick={this.handleFormSubmit}>Submit</button>
+            <button onClick={this.props.handleFormSubmit}>Submit</button>
         </form>
       </div>
     );
