@@ -1,6 +1,6 @@
-
-
 var db = require("../models");
+var mysql = require("mysql");
+
 
 
 function generateUnid(
@@ -28,6 +28,7 @@ function generateUnid(
 
 module.exports = function(app) {
 
+    //route to log user code in session variable and redirect to home page
       app.get("/api", function(req, res) {
 
         if(req.query.code == undefined){
@@ -47,6 +48,15 @@ module.exports = function(app) {
               console.log("FROM TEST", req.session.currentCode)
               res.send(req.session.currentCode)  
               });
+
+      app.post('/api/savadatastring', function(req,res){
+          db.item.create({
+            user_code:req.session.currentCode
+            data_string: req.body.dataString
+          })
+      })
+
+        
 
 
 }

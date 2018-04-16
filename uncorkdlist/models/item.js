@@ -2,10 +2,10 @@
 
 module.exports = function(sequelize, DataTypes){
     var Item = sequelize.define("Item", {
-        user_name: { 
+        user_code: { 
             type: DataTypes.STRING,
         },
-        item_info:{
+        data_string:{
             type: DataTypes.STRING,
         },
       });

@@ -5,17 +5,16 @@ import axios from "axios";
 // Export methods to be used to access the list API
 export default {
 
-    //getUserItems -- url will be something like: /?code=nicholasv101
+    //saveDataString - 
 
+    savedataString: function(dataString){
+        console.log(dataString)
 
-    //saveUserItem - 
-
-    // saveUserItem: function(itemData){
-    //     return axios({
-    //       method: 'post',
-    //       url: '/api/saveuseritem',
-    //       data: itemData
-    //     })
-    //   },
+        return axios({
+          method: 'post',
+          url: '/api/savedatastring',
+          data: dataString
+        })
+      },
 
 };
