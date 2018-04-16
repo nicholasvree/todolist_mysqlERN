@@ -4,6 +4,14 @@ import Helpers from "../utils/Helpers";
 // import "./Form.css";
 
 class DataForm extends Component {
+
+
+  componentDidMount() {
+
+    console.log("component mounted")
+    Helpers.getUserSession(this.props.match);
+  }
+
   // Setting the component's initial state
   state = {
     dataString: "",
@@ -24,7 +32,7 @@ class DataForm extends Component {
     event.preventDefault();
 
     // Alert the user their first and last name, clear `this.state.firstName` and `this.state.lastName`, clearing the inputs
-    Helpers.savedataString(this.state.dataString)
+    Helpers.savedataString({dataString: this.state.dataString})
     this.setState({
       dataString: "",
     });
@@ -33,7 +41,10 @@ class DataForm extends Component {
   render() {
     // Notice how each input has a `value`, `name`, and `onChange` prop
     return (
+
       <div>
+           <h1>{this.props.match.params.code}</h1>
+
         <form className="form">
             New:{' '}
             <input

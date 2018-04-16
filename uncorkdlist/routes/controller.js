@@ -1,5 +1,5 @@
 var db = require("../models");
-var mysql = require("mysql");
+var mysql = require("mysql2");
 
 
 
@@ -29,31 +29,41 @@ function generateUnid(
 module.exports = function(app) {
 
     //route to log user code in session variable and redirect to home page
-      app.get("/api", function(req, res) {
+      app.post("/api/saveusersession", function(req, res) {
 
-        if(req.query.code == undefined){
+        
+
+        if(req.body.params.code == undefined){
             req.session.currentCode=generateUnid()
         }else{
-            req.session.currentCode = req.query.code            
+            req.session.currentCode = req.body.params.code          
         }
 
-        console.log(req.session.currentCode)
+        console.log("LOGGING RAN", req.session.currentCode)
 
-        res.redirect("/")
+        res.send("TRUE")
         
       });
 
       //DELETE WHEN READY - route to test session permanence
-      app.get("/api/testSessionValue", function(req, res) {
+      app.get("/api/testsessionvalue", function(req, res) {
               console.log("FROM TEST", req.session.currentCode)
               res.send(req.session.currentCode)  
               });
 
-      app.post('/api/savadatastring', function(req,res){
-          db.item.create({
-            user_code:req.session.currentCode
+      app.post("/api/savedatastring", function(req,res){
+          // console.log("CODE", req.session.currentCode)
+          // console.log("DATASTRING", req.body)
+          
+          db.Item.create({
+            user_code:req.session.currentCode,
             data_string: req.body.dataString
-          })
+          }).then(function(postResult) {
+            // log the result to our terminal/bash window
+          // console.log(postResult);
+            // redirect
+            res.send(req.body)  
+          });
       })
 
         
