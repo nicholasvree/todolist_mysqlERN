@@ -19,9 +19,6 @@ class DataForm extends Component {
     }
   };
 
- 
-
-
 
   // Setting the component's initial state
   state = {
@@ -43,7 +40,8 @@ class DataForm extends Component {
     event.preventDefault();
 
     // Alert the user their first and last name, clear `this.state.firstName` and `this.state.lastName`, clearing the inputs
-    Helpers.savedataString({dataString: this.state.dataString})
+    Helpers.savedataString({dataString: this.state.dataString,
+                            userCode: this.props.userCode})
     this.setState({
       dataString: "",
     });

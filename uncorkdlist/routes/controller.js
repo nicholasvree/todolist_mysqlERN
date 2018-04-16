@@ -19,7 +19,7 @@ function generateUnid(
         1e9
         ).replace(     // replacing
           /[01]/g,     // zeroes and ones with
-          generateUnid() // random hex digits
+          generateUnid // random hex digits
         ).toLowerCase()
   }
 
@@ -53,10 +53,10 @@ module.exports = function(app) {
 
       app.post("/api/savedatastring", function(req,res){
           // console.log("CODE", req.session.currentCode)
-          // console.log("DATASTRING", req.body)
+          console.log("DATASTRING", req.body)
           
           db.Item.create({
-            user_code:req.session.currentCode,
+            user_code:req.body.userCode,
             data_string: req.body.dataString
           }).then(function(postResult) {
             // log the result to our terminal/bash window
@@ -66,7 +66,19 @@ module.exports = function(app) {
           });
       })
 
-        
+      app.get("/api/retrievedatastrings/:userCode", function(req, res){
+        // console.log("Retrieve controller ran" , req)
+
+        db.Item.findAll({
+          where: {
+            user_code : req.params.userCode
+          }
+        }).then(function(result){
+          console.log(result)
+
+          return res.json(result)
+        })
+      })
 
 
 }

@@ -45,6 +45,13 @@ export default {
               /[01]/g,     // zeroes and ones with
               this.generateUnid // random hex digits
             ).toLowerCase()
+      },
+
+      retrieveDataStrings: function(userCode){
+        console.log("RETRIEVE HELPER WORKS", userCode)
+
+        return axios.get('/api/retrievedatastrings/' + userCode)
       }
+      
 
 };
