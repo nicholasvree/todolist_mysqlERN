@@ -18,35 +18,32 @@ class App extends Component {
 
   };
 
-  
-    handleInputChange = event => {
-      // Getting the value and name of the input which triggered the change
-      const { name, value } = event.target;
-  
-      // Updating the input's state
-      this.setState({
-        [name]: value
-      });
-    };
-  
-    handleFormSubmit = event => {
-      // Preventing the default behavior of the form submit (which is to refresh the page)
-      event.preventDefault();
-  
-      // Alert the user their first and last name, clear `this.state.firstName` and `this.state.lastName`, clearing the inputs
-      Helpers.savedataString({dataString: this.state.dataString,
-                              userCode: this.state.userCode})
-      .then( ()=> {
-        Helpers.retrieveDataStrings(this.state.userCode)
-        .then( res=> {
-          this.setState({dataStringArray:res.data})
-        })
+
+  handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleFormSubmit = event => {
+    event.preventDefault();
+
+    //First add the new item to the database, when finished, retrieve all items for userCode and update dataStringArray state.
+    Helpers.savedataString({dataString: this.state.dataString,
+                            userCode: this.state.userCode})
+    .then( ()=> {
+      Helpers.retrieveDataStrings(this.state.userCode)
+      .then( res=> {
+        this.setState({dataStringArray:res.data})
       })
-    
-      this.setState({
-        dataString: "",
-      });
-    };
+    })
+  
+    //Reset clear out the input box -- should really be included in a promise/callback string
+    this.setState({
+      dataString: "",
+    });
+  };
   
 
 
@@ -56,7 +53,7 @@ class App extends Component {
     this.setState({userCode:value})
   };
 
-
+  //used on component mount to maintain sycnronicity between userCode state and userCode session storage & retrieve initial/pre-existing records
   setDataStrings = (value) => {
     this.setState({userCode:value}, () => {
       Helpers.retrieveDataStrings(this.state.userCode)
@@ -68,13 +65,7 @@ class App extends Component {
   }
 
 
-
-
-
   render() {
-
-    console.log("LOCATION", this.props.match)
-
     
     return (
       <div className="App">

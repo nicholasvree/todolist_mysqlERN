@@ -4,17 +4,16 @@ import { Redirect } from 'react-router'
 class Contacts extends React.Component {
 
   componentDidMount(){
-    console.log("COMPONENT MOUNTED")
-    sessionStorage.setItem('userCode',this.props.match.params.userCode)    
+    //retrieves the parameter value and sets it to local storage
+    sessionStorage.setItem('userCode',this.props.match.params.userCode)  
+    //syncing up the userCode state with the parameter value -- Consider if this is the cleanest way????  
     this.props.setUserCode(this.props.match.params.userCode)
   }
 
   render() {
-    console.log("USEr CODE", this.props.userCode)
-    
-    
 
     return (
+      //removal of parameter URL via redirection
       <Redirect to="/"/>
     );
   }
