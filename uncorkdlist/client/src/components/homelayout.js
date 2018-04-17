@@ -41,11 +41,7 @@ class HomeLayout extends Component {
     </Menu>
 
     <Container text style={{ marginTop: '7em' }}>
-      <Header as='h1'>Semantic UI React Fixed Template</Header>
-      <p>This is a basic fixed menu template using fixed size containers.</p>
-      <p>A text container is used for the main container, which is useful for single column layouts.</p>
-
-      <DataForm userCode={this.props.userCode } setUserCode={this.props.setUserCode}  setDataStrings = {this.props.setDataStrings}  dataStringArray={this.props.dataStringArray} handleFormSubmit={this.props.handleFormSubmit} handleInputChange={this.props.handleInputChange} dataString={this.props.dataString} error={this.props.error} sortDataStringArray={this.props.sortDataStringArray}/>
+      <DataForm userCode={this.props.userCode } setUserCode={this.props.setUserCode}  setDataStrings = {this.props.setDataStrings}  dataStringArray={this.props.dataStringArray} handleFormSubmit={this.props.handleFormSubmit} handleInputChange={this.props.handleInputChange} dataString={this.props.dataString} error={this.props.error} sortDataStringArray={this.props.sortDataStringArray} onInputWidgetMenuChange={this.props.onInputWidgetMenuChange}/>
     </Container>
 
     <Segment

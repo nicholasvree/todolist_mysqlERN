@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Table } from 'semantic-ui-react'
+import { Table, Button, Icon, Input } from 'semantic-ui-react'
 
 const tableData = [
   { name: 'John', age: 15, gender: 'Male' },
@@ -37,32 +37,40 @@ export default class TableExampleSortable extends Component {
 
   render() {
     const { column, data, direction } = this.state
+    console.log(this.props.dataStringArray)
 
     return (
       <Table sortable celled fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.handleSort('name')}>
-              Name
+              Item
             </Table.HeaderCell>
             <Table.HeaderCell sorted={column === 'age' ? direction : null} onClick={this.handleSort('age')}>
-              Age
+              Category
             </Table.HeaderCell>
             <Table.HeaderCell sorted={column === 'gender' ? direction : null} onClick={this.handleSort('gender')}>
-              Gender
+              Created Date
+            </Table.HeaderCell>
+            <Table.HeaderCell sorted={column === 'gender' ? direction : null} onClick={this.handleSort('gender')}>
+              Completed?
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {_.map(data, ({ age, gender, name }) => (
-            <Table.Row key={name}>
-              <Table.Cell>{name}</Table.Cell>
-              <Table.Cell>{age}</Table.Cell>
-              <Table.Cell>{gender}</Table.Cell>
+          {_.map(this.props.dataStringArray, ({ data_string, category, created_date, completed}) => (
+            <Table.Row key={data_string}>
+              <Table.Cell>Data: {data_string}</Table.Cell>
+              <Table.Cell>{category}</Table.Cell>
+              <Table.Cell>{created_date}</Table.Cell>
+              <Table.Cell>{completed}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
+
       </Table>
+
+
     )
   }
 }
