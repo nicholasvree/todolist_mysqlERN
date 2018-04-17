@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import DataForm from "./components/DataForm";
 import SetAndRedirect from "./components/SetAndRedirect";
 import Wrapper from './components/Wrapper'
+import HomeLayout from './components/homelayout.js'
+
 import Helpers from './utils/helpers'
 import logo from './logo.svg';
 import './App.css';
@@ -15,7 +17,9 @@ class App extends Component {
     userCode: null,
     dataStringArray: [],
     dataString:"",
-    error:""
+    dataCategory:"",
+    error:"",
+    selectedCategory:"Finances"
 
   };
 
@@ -41,6 +45,8 @@ class App extends Component {
     this.setState({
       [name]: value
     });
+
+    console.log(this.state)
   };
 
   handleFormSubmit = event => {
@@ -49,7 +55,8 @@ class App extends Component {
     
     //First add the new item to the database, when finished, retrieve all items for userCode and update dataStringArray state.
     Helpers.savedataString({dataString: this.state.dataString,
-                            userCode: this.state.userCode})
+                            userCode: this.state.userCode,
+                            dataCategory: this.state.selectedCategory})
     .then(response => {if (response.data.name==="SequelizeUniqueConstraintError"){
       this.setState({
         error:"Looks like you have a duplicate task.  Try something unique."
@@ -95,7 +102,9 @@ class App extends Component {
         <Router>
           <Wrapper>
             <Route path="/code/:userCode?" render={props => <SetAndRedirect {...props} userCode={this.state.userCode} setUserCode = {this.setUserCode} /> }/>
-            <Route exact path="/" render={props => <DataForm userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/>
+            {/* <Route exact path="/" render={props => <DataForm userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/> */}
+            <Route exact path="/home" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/>
+
           </Wrapper>
         </Router>
       </div>

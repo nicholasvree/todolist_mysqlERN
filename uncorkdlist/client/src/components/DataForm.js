@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import Helpers from "../utils/helpers.js";
+import "./DataForm.css";
+import ItemsTable from "./ItemsTable.js"
+
 
 // import "./Form.css";
 
@@ -27,7 +30,12 @@ class DataForm extends Component {
     //create an element that maps the each record to an H1 element. 
     const elements = dataStringArray.map(data => {    
       return(
-         <h1>Data: {data.data_string}</h1>
+      <tr>
+        <td>Data: {data.data_string}</td>
+        <td>{data.category}</td>
+        <td>{data.created_date}</td>
+        <td>{data.completed}</td>
+      </tr>
       ) 
   }) 
 
@@ -41,8 +49,15 @@ class DataForm extends Component {
            <button onClick={this.props.sortDataStringArray} value="asc">Sort Asc</button>
            <button onClick={this.props.sortDataStringArray} value="desc">Sort Desc</button>
 
-
-           {elements}
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Date Entered</th>
+              <th>Completed?</th>
+            </tr>
+            {elements}
+          </table>
 
         <form className="form">
             New:{' '}
@@ -53,9 +68,24 @@ class DataForm extends Component {
               type="text"
               placeholder="Data"
             />
+
+        
+        <select name="selectedCategory" defaultValue={this.props.selectValue} onChange={this.props.handleInputChange}>
+          <option value="Finances">Finances</option>
+          <option value="Work">Work</option>
+          <option value="Health">Health</option>
+          <option value="Family">Family</option>
+          <option value="Friends">Friends</option>
+          <option value="Leisure">Leisure</option>
+          <option value="Household">Household</option>
+        </select>
+        
+
             <button onClick={this.props.handleFormSubmit}>Submit</button>
         </form>
         {this.props.error}
+
+        <ItemsTable/>
       </div>
     );
   }

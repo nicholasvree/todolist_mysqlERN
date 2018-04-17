@@ -7,7 +7,8 @@ module.exports = function(app) {
   app.post("/api/savedatastring", function(req,res){
       db.Item.create({
         user_code:req.body.userCode,
-        data_string: req.body.dataString
+        data_string: req.body.dataString,
+        category: req.body.dataCategory
       })
       .catch(function(err){
        return res.send(err)
