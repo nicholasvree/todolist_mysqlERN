@@ -31,6 +31,19 @@ module.exports = function(app) {
     })
   })
 
+  app.post("/api/changeStatus", function(req, res){
+    db.Item.update(
+      {completed:req.body.value.completed},
+      {where: {id:req.body.value.id}
+    })
+    .catch(function(err){
+      return res.send(err)
+     })
+     .then(function(result){
+       return res.send(result)
+     })
+  })
+
        // OUT OF USE - route to log user code in session variable and redirect to home page
     //   app.post("/api/saveusersession", function(req, res) {
 
