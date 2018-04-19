@@ -41,7 +41,7 @@ class HomeLayout extends Component {
     </Menu>
 
     <Container text style={{ marginTop: '7em' }}>
-      <DataForm userCode={this.props.userCode } setUserCode={this.props.setUserCode}  setDataStrings = {this.props.setDataStrings}  dataStringArray={this.props.dataStringArray} handleFormSubmit={this.props.handleFormSubmit} handleInputChange={this.props.handleInputChange} dataString={this.props.dataString} error={this.props.error} sortDataStringArray={this.props.sortDataStringArray} onInputWidgetMenuChange={this.props.onInputWidgetMenuChange}/>
+      <DataForm userCode={this.props.userCode } setUserCode={this.props.setUserCode}  setDataStrings = {this.props.setDataStrings}  dataStringArray={this.props.dataStringArray} handleFormSubmit={this.props.handleFormSubmit} handleInputChange={this.props.handleInputChange} dataString={this.props.dataString} error={this.props.error} sortDataStringArray={this.props.sortDataStringArray} onInputWidgetMenuChange={this.props.onInputWidgetMenuChange} handleSort={this.props.handleSort}/>
     </Container>
 
     <Segment

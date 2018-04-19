@@ -40,6 +40,7 @@ class DataForm extends Component {
       {
         let unID = Helpers.generateUnid()
         sessionStorage.setItem('userCode', unID);
+        this.setUserCode(unID)
         this.props.setDataStrings(sessionStorage.getItem(unID))
     }
     //If not null, sync up state with session userCode and deliver pre-existing records
@@ -110,7 +111,7 @@ class DataForm extends Component {
             <button onClick={this.props.handleFormSubmit}>Submit</button>
         </form> */}
 
-        <ItemsTable dataStringArray={this.props.dataStringArray} dataString={this.props.dataString} handInputChange={this.props.handleInputChange} handleFormSubmit={this.props.handleFormSubmit}/>
+        <ItemsTable dataStringArray={this.props.dataStringArray} dataString={this.props.dataString} handInputChange={this.props.handleInputChange} handleFormSubmit={this.props.handleFormSubmit} handleSort={this.props.handleSort}/>
       
         
               
@@ -119,7 +120,7 @@ class DataForm extends Component {
                         <Grid.Column>
 
                         New:  {' '}
-                    <div class="ui input">
+                    <div className="ui input">
                         <input
                             value={this.props.dataString}
                             name="dataString"

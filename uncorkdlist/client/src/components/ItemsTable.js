@@ -16,25 +16,6 @@ export default class TableExampleSortable extends Component {
     direction: null,
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-
-    if (column !== clickedColumn) {
-      this.setState({
-        column: clickedColumn,
-        data: _.sortBy(data, [clickedColumn]),
-        direction: 'ascending',
-      })
-
-      return
-    }
-
-    this.setState({
-      data: data.reverse(),
-      direction: direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
   render() {
     const { column, data, direction } = this.state
     console.log(this.props.dataStringArray)
@@ -43,16 +24,16 @@ export default class TableExampleSortable extends Component {
       <Table sortable celled fixed>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.handleSort('name')}>
+            <Table.HeaderCell sorted={column === 'data_string' ? direction : null} onClick={this.props.handleSort('data_string')}>
               Item
             </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'age' ? direction : null} onClick={this.handleSort('age')}>
+            <Table.HeaderCell sorted={column === 'category' ? direction : null} onClick={this.props.handleSort('category')}>
               Category
             </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'gender' ? direction : null} onClick={this.handleSort('gender')}>
+            <Table.HeaderCell sorted={column === 'created_date' ? direction : null} onClick={this.props.handleSort('created_date')}>
               Created Date
             </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'gender' ? direction : null} onClick={this.handleSort('gender')}>
+            <Table.HeaderCell sorted={column === 'completed' ? direction : null} onClick={this.props.handleSort('completed')}>
               Completed?
             </Table.HeaderCell>
           </Table.Row>
@@ -63,7 +44,7 @@ export default class TableExampleSortable extends Component {
               <Table.Cell>Data: {data_string}</Table.Cell>
               <Table.Cell>{category}</Table.Cell>
               <Table.Cell>{created_date}</Table.Cell>
-              <Table.Cell>{completed}</Table.Cell>
+              <Table.Cell>{completed === false ? "FALSE" : "TRUE"}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

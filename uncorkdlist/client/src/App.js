@@ -4,6 +4,7 @@ import DataForm from "./components/DataForm";
 import SetAndRedirect from "./components/SetAndRedirect";
 import Wrapper from './components/Wrapper'
 import HomeLayout from './components/homelayout.js'
+import _ from 'lodash'
 
 import Helpers from './utils/helpers'
 import logo from './logo.svg';
@@ -19,31 +20,52 @@ class App extends Component {
     dataString:"",
     dataCategory:"",
     error:"",
-    selectedCategory:"Finances"
+    selectedCategory:"Finances",
+    column:null,
+    direction:null
+
 
   };
+
+  handleSort = clickedColumn => () => {
+    // const { column, data, direction } = this.state
+
+    console.log("CLICKED", clickedColumn)
+
+    if (this.state.column !== clickedColumn) {
+      console.log("MATCH")
+      this.setState({
+        column: clickedColumn,
+        dataStringArray: _.sortBy(this.state.dataStringArray, [clickedColumn]),
+        direction: 'ascending',
+      })
+
+      return
+    }
+
+    this.setState({
+      dataStringArray: this.state.dataStringArray.reverse(),
+      direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
+    })
+  }
 
   onInputWidgetMenuChange = (event, data) => {
     this.setState({selectedCategory:data.value})
-}
+  }
 
-  sortDataStringArray = event =>{
-
-
-
-   
-    let intermediate = this.state.dataStringArray;
-    // if(direction === "asc"){
-    //   intermediate.sort(function(a, b){return a-b});
-    // }else{
-    if(event.target.value === 'asc'){
-      intermediate.sort(Helpers.compareAsc)
-    } else {
-      intermediate.sort(Helpers.compareDesc)
-    }
-  // }
-    this.setState({dataStringArray:intermediate})
-  };
+  // sortDataStringArray = event =>{
+  //   let intermediate = this.state.dataStringArray;
+  //   // if(direction === "asc"){
+  //   //   intermediate.sort(function(a, b){return a-b});
+  //   // }else{
+  //   if(event.target.value === 'asc'){
+  //     intermediate.sort(Helpers.compareAsc)
+  //   } else {
+  //     intermediate.sort(Helpers.compareDesc)
+  //   }
+  // // }
+  //   this.setState({dataStringArray:intermediate})
+  // };
 
 
   handleInputChange = event => {
@@ -72,6 +94,7 @@ class App extends Component {
       Helpers.retrieveDataStrings(this.state.userCode)
       .then( res=> {
         this.setState({dataStringArray:res.data})
+        console.log("retruned", this.state.dataStringArray)
       })
     })
   
@@ -108,7 +131,7 @@ class App extends Component {
         <Router>
           <Wrapper>
             <Route path="/code/:userCode?" render={props => <SetAndRedirect {...props} userCode={this.state.userCode} setUserCode = {this.setUserCode} /> }/>
-            <Route exact path="/" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray} onInputWidgetMenuChange={this.onInputWidgetMenuChange}/> }/>
+            <Route exact path="/" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray} onInputWidgetMenuChange={this.onInputWidgetMenuChange} handleSort={this.handleSort}/> }/>
             <Route exact path="/home" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/>
 
           </Wrapper>
