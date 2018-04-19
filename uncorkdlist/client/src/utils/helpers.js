@@ -21,6 +21,14 @@ export default {
     return axios.get('/api/retrievedatastrings/' + userCode)
   },
 
+  changeStatus: function(data){
+    return axios({
+      method:'post',
+      url :'/api/changeStatus',
+      data : data
+    })
+  },
+
   //Logic to randomly generate 32-bit Hex
   generateUnid: function(a){
     return a           // if the placeholder was passed, return

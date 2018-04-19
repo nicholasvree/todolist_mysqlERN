@@ -53,6 +53,21 @@ class App extends Component {
     this.setState({selectedCategory:data.value})
   }
 
+  onStatusClick = (event,data) => {
+    Helpers.changeStatus(data)
+    .then( ()=> {
+      Helpers.retrieveDataStrings(this.state.userCode)
+      .then( res=> {
+        this.setState({dataStringArray:res.data}, () => {
+          console.log(this.state.column)
+          this.setState({
+            dataStringArray: _.sortBy(this.state.dataStringArray, this.state.columns)
+          })
+        })
+      })
+    })
+  }
+
   // sortDataStringArray = event =>{
   //   let intermediate = this.state.dataStringArray;
   //   // if(direction === "asc"){
@@ -131,7 +146,7 @@ class App extends Component {
         <Router>
           <Wrapper>
             <Route path="/code/:userCode?" render={props => <SetAndRedirect {...props} userCode={this.state.userCode} setUserCode = {this.setUserCode} /> }/>
-            <Route exact path="/" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray} onInputWidgetMenuChange={this.onInputWidgetMenuChange} handleSort={this.handleSort}/> }/>
+            <Route exact path="/" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray} onInputWidgetMenuChange={this.onInputWidgetMenuChange} handleSort={this.handleSort} onStatusClick={this.onStatusClick}/> }/>
             <Route exact path="/home" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/>
 
           </Wrapper>

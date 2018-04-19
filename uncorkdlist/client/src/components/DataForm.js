@@ -111,7 +111,7 @@ class DataForm extends Component {
             <button onClick={this.props.handleFormSubmit}>Submit</button>
         </form> */}
 
-        <ItemsTable dataStringArray={this.props.dataStringArray} dataString={this.props.dataString} handInputChange={this.props.handleInputChange} handleFormSubmit={this.props.handleFormSubmit} handleSort={this.props.handleSort}/>
+        <ItemsTable dataStringArray={this.props.dataStringArray} dataString={this.props.dataString} handInputChange={this.props.handleInputChange} handleFormSubmit={this.props.handleFormSubmit} handleSort={this.props.handleSort} onStatusClick={this.props.onStatusClick}/>
       
         
               
