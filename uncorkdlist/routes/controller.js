@@ -1,5 +1,6 @@
 var db = require("../models");
 var mysql = require("mysql2");
+var Sequelize = require('sequelize');
 
 module.exports = function(app) {
    
@@ -43,6 +44,22 @@ module.exports = function(app) {
        return res.send(result)
      })
   })
+
+
+  app.get("/api/analytics/:userCode", function(req,res){
+    db.Item.findAll({
+       group:['category'],
+       attributes: ["category", [Sequelize.fn('COUNT', Sequelize.col('id')),'total']],
+       where:{user_code:req.params.userCode}
+    }).catch(function(err){
+    return res.send(err)
+    }).then(function(results){
+      console.log("ANAL RESULTS", results)
+    return res.send(results)
+    })
+  })
+
+
 
        // OUT OF USE - route to log user code in session variable and redirect to home page
     //   app.post("/api/saveusersession", function(req, res) {

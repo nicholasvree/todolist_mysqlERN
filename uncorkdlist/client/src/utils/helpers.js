@@ -29,6 +29,11 @@ export default {
     })
   },
 
+  getAnalytics: function(userCode){
+    console.log("DATA", userCode);
+    return axios.get('/api/analytics/' + userCode)
+  },
+
   //Logic to randomly generate 32-bit Hex
   generateUnid: function(a){
     return a           // if the placeholder was passed, return

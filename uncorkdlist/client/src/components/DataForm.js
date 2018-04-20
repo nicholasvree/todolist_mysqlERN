@@ -40,7 +40,7 @@ class DataForm extends Component {
       {
         let unID = Helpers.generateUnid()
         sessionStorage.setItem('userCode', unID);
-        this.setUserCode(unID)
+        this.props.setUserCode(unID)
         this.props.setDataStrings(sessionStorage.getItem(unID))
     }
     //If not null, sync up state with session userCode and deliver pre-existing records
