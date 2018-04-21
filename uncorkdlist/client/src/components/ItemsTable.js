@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { Table, Button, Icon, Input } from 'semantic-ui-react'
-import CompleteButton from './CompleteButton'
 
 const tableData = [
   { name: 'John', age: 15, gender: 'Male' },
@@ -45,11 +44,11 @@ export default class TableExampleSortable extends Component {
               <Table.Cell>Data: {data_string}</Table.Cell>
               <Table.Cell>{category}</Table.Cell>
               <Table.Cell>{created_date}</Table.Cell>
-              <Table.Cell>{completed === false ? <Button value={{id:id,completed:true}} onClick={this.props.onStatusClick}>Not Done</Button> :<Button positive value={{id:id,completed:false}} onClick={this.props.onStatusClick}>Done</Button>}</Table.Cell>
+              <Table.Cell>{completed === false ? <Button value={{id:id,completed:true}} onClick={this.props.onStatusClick}>Not Done</Button> 
+                                                :<Button positive value={{id:id,completed:false}} onClick={this.props.onStatusClick}>Done</Button>}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
-
       </Table>
 
 

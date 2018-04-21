@@ -25,7 +25,8 @@ module.exports = function(app) {
     db.Item.findAll({
       where: {
         user_code : req.params.userCode
-      }
+      },
+      order: ['id']
     }).then(function(result){
       console.log(result)
       return res.json(result)

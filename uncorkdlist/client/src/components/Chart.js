@@ -24,7 +24,7 @@ componentDidMount() {
       {
         let unID = Helpers.generateUnid()
         sessionStorage.setItem('userCode', unID);
-        this.props.setUserCode(unID)
+        // this.props.setUserCode(unID)
         this.props.setAnalytics(sessionStorage.getItem(unID))
     }
     //If not null, sync up state with session userCode and deliver pre-existing records
@@ -45,7 +45,7 @@ componentDidMount() {
             labels: this.props.analyticCategories,
             datasets:[
               {
-                label:'Population',
+                label:'Count',
                 data:this.props.analyticCounts,
                 backgroundColor:[
                   'rgba(255, 99, 132, 0.6)',
@@ -69,6 +69,17 @@ componentDidMount() {
             legend:{
               display:false,
               position:this.props.legendPosition
+            },
+            scales: {
+                yAxes: [{
+                    gridlines:{
+                        display:true
+                    },
+                    ticks:{
+                        min:0,
+                        stepSize:1
+                    }
+                }]
             }
           }}
         />

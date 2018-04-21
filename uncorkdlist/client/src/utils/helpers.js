@@ -51,46 +51,5 @@ export default {
           /[01]/g,     // zeroes and ones with
           this.generateUnid // random hex digits
         ).toLowerCase()
-  },
-
-  compareAsc: function (a, b) {
-    // Use toUpperCase() to ignore character casing
-    const dataA = a.data_string.toUpperCase();
-    const dataB = b.data_string.toUpperCase();
-  
-    let comparison = 0;
-    if (dataA > dataB) {
-      comparison = 1;
-    } else if (dataA < dataB) {
-      comparison = -1;
-    }
-    return comparison;
-  }, 
-
-  compareDesc: function (a, b) {
-    // Use toUpperCase() to ignore character casing
-    const dataA = a.data_string.toUpperCase();
-    const dataB = b.data_string.toUpperCase();
-  
-    let comparison = 0;
-    if (dataA > dataB) {
-      comparison = -1;
-    } else if (dataA < dataB) {
-      comparison = 1;
-    }
-    return comparison;
-  }, 
-
-  
-
-
-
-  // //OUT OF USE - was used for server session
-  // getUserSession: function(userCode){
-  //   return axios({
-  //     method: 'post',
-  //     url: '/api/saveusersession',
-  //     data: userCode
-  //   })
-  // }
+  }
 };

@@ -1,17 +1,8 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const expressSession = require('express-session');
 
 const app = express();
-
-
-app.use(expressSession({ 
-  cookieName: 'currentCode',
-  secret: 'this-is-a-secret-token', 
-  cookie: { maxAge: 60000 }}));
-
-
 
 const PORT = process.env.PORT || 3001;
 
@@ -36,7 +27,6 @@ app.use((req, res, next) => {
 var db=require("./models")
 
 require("./routes/controller.js")(app);
-
 
 app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));

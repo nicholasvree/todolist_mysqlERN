@@ -16,121 +16,48 @@ class App extends Component {
 
   state = {
     userCode: null,
-    dataStringArray: [],
-    dataString:"",
-    dataCategory:"",
-    error:"",
+    dataString:null,
+    error:null,
     selectedCategory:"Finances",
-    column:null,
-    direction:null,
-    formOrAnalytics: 'analytics',
+    column:'id',
+    direction:'asc',
+    formOrAnalytics: 'form',
 
+    dataStringArray:[],    
     analyticCategories:[],
-    analyticCounts:[],
-
-    chartData:{
-      labels: ['Boston', 'Worcester', 'Springfield', 'Lowell', 'Cambridge', 'New Bedford'],
-      datasets:[
-        {
-          label:'Population',
-          data:[
-            617594,
-            181045,
-            153060,
-            106519,
-            105162,
-            95072
-          ],
-          backgroundColor:[
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(153, 102, 255, 0.6)',
-            'rgba(255, 159, 64, 0.6)',
-            'rgba(255, 99, 132, 0.6)'
-          ]
-        }
-      ]
-    }
-
-
-
+    analyticCounts:[]
   };
 
-  handleSort = clickedColumn => () => {
-    // const { column, data, direction } = this.state
-
-    console.log("CLICKED", clickedColumn)
-
-    if (this.state.column !== clickedColumn) {
-      console.log("MATCH")
-      this.setState({
-        column: clickedColumn,
-        dataStringArray: _.sortBy(this.state.dataStringArray, [clickedColumn]),
-        direction: 'ascending',
-      })
-
-      return
-    }
-
-    this.setState({
-      dataStringArray: this.state.dataStringArray.reverse(),
-      direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
-  onInputWidgetMenuChange = (event, data) => {
-    this.setState({selectedCategory:data.value})
-  }
-
-  onStatusClick = (event,data) => {
-    Helpers.changeStatus(data)
-    .then( ()=> {
+  //Used on DataForm component mount to maintain sycnronicity between userCode state and userCode session storage.  Also retrieves initial/pre-existing records
+  setDataStrings = (value) => {
+    this.setState({userCode:value}, () => {
       Helpers.retrieveDataStrings(this.state.userCode)
-      .then( res=> {
-        this.setState({dataStringArray:res.data}, () => {
-          console.log(this.state.column)
-          this.setState({
-            dataStringArray: _.sortBy(this.state.dataStringArray, this.state.columns)
-          })
-        })
+      .then( res => {
+        this.setState({dataStringArray:_.orderBy(res.data, [this.state.column, 'id'], this.state.direction)})        
+      })      
+    })
+  };
+
+  //Used on Chart component mount to maintain sycnronicity between userCode state and userCode session storage.  Also retrieves initial/pre-existing aggregate records
+  setAnalytics = (value) => {
+    this.setState({userCode:value}, () => {
+      Helpers.getAnalytics(this.state.userCode)
+      .then(res => {
+        
+        let tempCatArray = []
+        let tempCountArray = []
+
+        for(let i=0; i<res.data.length; i++){
+          tempCatArray.push(res.data[i].category)
+          tempCountArray.push(res.data[i].total)
+        }
+
+        this.setState({analyticCategories:tempCatArray, analyticCounts: tempCountArray})
       })
     })
   }
 
-  // getAnalytics = () => {
-  //   Helpers.getAnalytics(this.state.userCode)
-  //   .then( res => {
-  //     console.log(res)
-  //     this.setState({analytics:res.data})
-  //   })
-  // }
-
-  // sortDataStringArray = event =>{
-  //   let intermediate = this.state.dataStringArray;
-  //   // if(direction === "asc"){
-  //   //   intermediate.sort(function(a, b){return a-b});
-  //   // }else{
-  //   if(event.target.value === 'asc'){
-  //     intermediate.sort(Helpers.compareAsc)
-  //   } else {
-  //     intermediate.sort(Helpers.compareDesc)
-  //   }
-  // // }
-  //   this.setState({dataStringArray:intermediate})
-  // };
-
-
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-
-    console.log(this.state)
-  };
-
+  //Used to submit/create a new to-do item and then re-retrieve the list
   handleFormSubmit = event => {
     event.preventDefault();
     this.setState({error:""})
@@ -147,8 +74,7 @@ class App extends Component {
     .then( ()=> {
       Helpers.retrieveDataStrings(this.state.userCode)
       .then( res=> {
-        this.setState({dataStringArray:res.data})
-        console.log("retruned", this.state.dataStringArray)
+        this.setState({dataStringArray:_.orderBy(res.data, [this.state.column, 'id'], this.state.direction)})
       })
     })
   
@@ -158,6 +84,50 @@ class App extends Component {
     });
   };
 
+  //used to set sort columns in state & sort the dataStringArray.
+  handleSort = clickedColumn => () => {
+    if (this.state.column !== clickedColumn) {
+      this.setState({
+        column: clickedColumn,
+        dataStringArray: _.orderBy(this.state.dataStringArray, [clickedColumn, 'id'], 'asc'),
+        direction: 'asc',
+      })
+      return
+    }
+    this.setState({
+      direction: this.state.direction === 'asc' ? 'desc' : 'asc',
+    }, () => {
+      this.setState(
+        this.setState({dataStringArray:_.orderBy(this.state.dataStringArray, [this.state.column, 'id'], this.state.direction)})        
+      )
+    })
+  }
+
+  //Changes status from not done to done or vice/versa.  Also resorts if columns if columns are beings sorted
+  onStatusClick = (event,data) => {
+    Helpers.changeStatus(data)
+    .then( ()=> {
+      Helpers.retrieveDataStrings(this.state.userCode)
+      .then( res=> {
+        this.setState({dataStringArray:_.orderBy(res.data, [this.state.column, 'id'], this.state.direction)})
+        })
+      })
+  }
+
+  //sets the status of the category drop down into state
+  onInputWidgetMenuChange = (event, data) => {
+    this.setState({selectedCategory:data.value})
+  }
+
+  //Used for input forms
+  handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+
   seeList = () => {
     this.setState({formOrAnalytics:'form'})
   }
@@ -166,45 +136,14 @@ class App extends Component {
     this.setState({formOrAnalytics:'analytics'})
   }
   
-
-
-
   setUserCode = (value) =>{
-    console.log("SET RAN")
     this.setState({userCode:value})
   };
 
-  //used on component mount to maintain sycnronicity between userCode state and userCode session storage & retrieve initial/pre-existing records
-  setDataStrings = (value) => {
-    this.setState({userCode:value}, () => {
-      Helpers.retrieveDataStrings(this.state.userCode)
-      .then( res => {
-        console.log(res)
-        this.setState({dataStringArray:res.data})
-      })      
-    })
-  };
 
-  setAnalytics = (value) => {
-    this.setState({userCode:value}, () => {
-      Helpers.getAnalytics(this.state.userCode)
-      .then(res => {
-
-        console.log(res.data)
-
-        let tempCatArray = []
-        let tempCountArray = []
-
-        for(let i=0; i<res.data.length; i++){
-          tempCatArray.push(res.data[i].category)
-          tempCountArray.push(res.data[i].total)
-        }
-
-        this.setState({analyticCategories:tempCatArray, analyticCounts: tempCountArray})
-      })
-    })
+  componentDidMount () {
+    console.log(this.state.column)
   }
-
 
   render() {
     
@@ -213,9 +152,23 @@ class App extends Component {
         <Router>
           <Wrapper>
             <Route path="/code/:userCode?" render={props => <SetAndRedirect {...props} userCode={this.state.userCode} setUserCode = {this.setUserCode} /> }/>
-            <Route exact path="/" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray} onInputWidgetMenuChange={this.onInputWidgetMenuChange} handleSort={this.handleSort} onStatusClick={this.onStatusClick}  chartData={this.state.chartData} setAnalytics={this.setAnalytics} formOrAnalytics={this.state.formOrAnalytics} analyticCategories={this.state.analyticCategories}  analyticCounts={this.state.analyticCounts} seeList={this.seeList} seeAnalytics={this.seeAnalytics}/>}/>
-            {/* <Route exact path="/home" render={props => <HomeLayout userCode =  {this.state.userCode } setUserCode={this.setUserCode}  setDataStrings = {this.setDataStrings}  dataStringArray={this.state.dataStringArray} handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} dataString={this.state.dataString} error={this.state.error} sortDataStringArray={this.sortDataStringArray}/> }/> */}
-
+            <Route exact path="/" render={props => <HomeLayout  userCode =  {this.state.userCode } 
+                                                                setUserCode={this.setUserCode}  
+                                                                setDataStrings = {this.setDataStrings}  
+                                                                dataStringArray={this.state.dataStringArray} 
+                                                                handleFormSubmit={this.handleFormSubmit} 
+                                                                handleInputChange={this.handleInputChange} 
+                                                                dataString={this.state.dataString} 
+                                                                error={this.state.error} 
+                                                                sortDataStringArray={this.sortDataStringArray} 
+                                                                onInputWidgetMenuChange={this.onInputWidgetMenuChange} 
+                                                                handleSort={this.handleSort} onStatusClick={this.onStatusClick}  
+                                                                chartData={this.state.chartData} setAnalytics={this.setAnalytics} 
+                                                                formOrAnalytics={this.state.formOrAnalytics} 
+                                                                analyticCategories={this.state.analyticCategories}  
+                                                                analyticCounts={this.state.analyticCounts} 
+                                                                seeList={this.seeList} 
+                                                                seeAnalytics={this.seeAnalytics}/>}/>
           </Wrapper>
         </Router>
       </div>
